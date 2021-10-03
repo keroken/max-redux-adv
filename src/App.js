@@ -5,7 +5,7 @@ import Notification from './components/UI/Notification';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { uiActions } from './store';
-import { sendCartData } from './store/cartSlice';
+import { sendCartData } from './store/cartDataActions';
 
 let isInitial = true;
 
