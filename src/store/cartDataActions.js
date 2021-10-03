@@ -1,5 +1,34 @@
-import { uiActions } from ".";
-import { database } from "firebase";
+import { uiActions, cartActions } from ".";
+import { database } from '../database/config';
+
+export const fetchCartData = () => {
+  return async (dispatch) => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${database}/cart.json`
+      );
+
+      if (!response.ok) {
+        throw new Error('Could not fetch data.');
+      }
+      const data = response.json();
+      return data;
+    }
+
+    try {
+      const cartData = await fetchData();
+      dispatch(cartActions.replaceCart(cartData));
+    } catch (error) {
+      dispatch(
+        uiActions.showNotification({
+          status: 'error',
+          title: 'Error',
+          message: 'Fetching cart data failed.',
+        })
+      );
+    }
+  };
+};
 
 export const sendCartData = (cart) => {
   return async (dispatch) => {
@@ -10,9 +39,17 @@ export const sendCartData = (cart) => {
     });
 
     const sendRequest = async () => {
-      return database.ref('cart').update({
-        body: JSON.stringify(cart)
-      });
+      const response = await fetch(
+        `${database}/cart.json`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(cart),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Sending cart data failed.');
+      }
     };
 
     try {
