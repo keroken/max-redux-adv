@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { uiActions } from '.';
-import { database } from '../database/config';
 
 const initialCartState = { items: [], totalQuantity: 0 };
 
